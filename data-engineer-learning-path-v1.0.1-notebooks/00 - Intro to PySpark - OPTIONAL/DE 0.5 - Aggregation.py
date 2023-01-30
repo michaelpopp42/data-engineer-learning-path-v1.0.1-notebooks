@@ -164,7 +164,7 @@ display(state_aggregates_df)
 
 from pyspark.sql.functions import cos, sqrt
 
-display(spark.range(10)  # Create a DataFrame with a single column called "id" with a range of integer values
+display(spark.range(100)  # Create a DataFrame with a single column called "id" with a range of integer values
         .withColumn("sqrt", sqrt("id"))
         .withColumn("cos", cos("id"))
        )

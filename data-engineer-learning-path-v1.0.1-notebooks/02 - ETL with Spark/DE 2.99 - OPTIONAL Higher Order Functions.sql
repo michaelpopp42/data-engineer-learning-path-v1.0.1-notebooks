@@ -105,9 +105,35 @@ FROM sales
 
 -- TODO
 CREATE OR REPLACE TABLE sales_product_flags AS
-<FILL_IN>
-EXISTS <FILL_IN>.item_name LIKE "%Mattress"
-EXISTS <FILL_IN>.item_name LIKE "%Pillow"
+SELECT items,
+EXISTS (items, i ->i.item_name LIKE "%Mattress") As mattress,
+EXISTS (items, i ->i.item_name LIKE "%Pillow") AS pillow
+FROM sales
+
+-- COMMAND ----------
+
+
+
+-- COMMAND ----------
+
+SElect * from sales_product_flags
+
+-- COMMAND ----------
+
+CREATE OR REPLACE TABLE sales_product_flags_filtered AS
+SELECT items, 
+EXISTS (items, i ->i.item_name LIKE "%Mattress") As mattress, mattressDetails, 
+EXISTS (items, i ->i.item_name LIKE "%Pillow") AS pillow, pillowDetails  
+FROM 
+( 
+SELECT items,
+FILTER (items, i ->i.item_name LIKE "%Pillow") as pillowDetails,
+FILTER (items, i ->i.item_name LIKE "%Mattress") as mattressDetails
+FROM sales
+); 
+
+Select * from sales_product_flags_filtered
+
 
 -- COMMAND ----------
 

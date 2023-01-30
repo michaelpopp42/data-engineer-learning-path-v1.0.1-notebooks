@@ -51,6 +51,11 @@
 
 -- COMMAND ----------
 
+-- MAGIC %python
+-- MAGIC display(f"{DA.schema_name}")
+
+-- COMMAND ----------
+
 CREATE SCHEMA IF NOT EXISTS ${da.schema_name}_default_location;
 CREATE SCHEMA IF NOT EXISTS ${da.schema_name}_custom_location LOCATION '${da.paths.working_dir}/${da.schema_name}_custom_location.db';
 
@@ -64,6 +69,8 @@ CREATE SCHEMA IF NOT EXISTS ${da.schema_name}_custom_location LOCATION '${da.pat
 -- COMMAND ----------
 
 DESCRIBE SCHEMA EXTENDED ${da.schema_name}_default_location;
+
+--DESCRIBE SCHEMA EXTENDED michaelpopp42_f1gc_dbacademy_delp_default_location;
 
 -- COMMAND ----------
 

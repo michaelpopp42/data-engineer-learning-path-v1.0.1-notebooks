@@ -78,9 +78,10 @@ print(col("device"))
 
 # COMMAND ----------
 
-col("ecommerce.purchase_revenue_in_usd") + col("ecommerce.total_item_quantity")
-col("event_timestamp").desc()
-(col("ecommerce.purchase_revenue_in_usd") * 100).cast("int")
+print(col("ecommerce.purchase_revenue_in_usd") + col("ecommerce.total_item_quantity"))
+print(col("event_timestamp").desc())
+print((col("ecommerce.purchase_revenue_in_usd") * 100).cast("int"))
+print(col("ecommerce.purchase_revenue_in_usd").isNotNull())
 
 # COMMAND ----------
 
@@ -93,6 +94,9 @@ rev_df = (events_df
          .filter(col("ecommerce.purchase_revenue_in_usd").isNotNull())
          .withColumn("purchase_revenue", (col("ecommerce.purchase_revenue_in_usd") * 100).cast("int"))
          .withColumn("avg_purchase_revenue", col("ecommerce.purchase_revenue_in_usd") / col("ecommerce.total_item_quantity"))
+         .drop('ecommerce')
+         .dropDuplicates()
+         .limit(10)
          .sort(col("avg_purchase_revenue").desc())
         )
 
@@ -182,6 +186,7 @@ display(no_sales_df)
 
 mobile_df = events_df.withColumn("mobile", col("device").isin("iOS", "Android"))
 display(mobile_df)
+print(col("device").isin("iOS", "Android"))
 
 # COMMAND ----------
 
@@ -271,6 +276,7 @@ display(increase_timestamps_df)
 # COMMAND ----------
 
 decrease_timestamp_df = events_df.sort(col("event_timestamp").desc())
+print(col("event_timestamp").desc())
 display(decrease_timestamp_df)
 
 # COMMAND ----------

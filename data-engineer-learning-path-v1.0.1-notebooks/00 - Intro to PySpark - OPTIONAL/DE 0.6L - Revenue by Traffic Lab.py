@@ -54,8 +54,11 @@ display(df)
 # COMMAND ----------
 
 # TODO
-
-traffic_df = (df.FILL_IN
+from pyspark.sql.functions import round
+from pyspark.sql.functions import avg
+traffic_df = (df
+              .groupBy("traffic_source")
+              .agg(round(sum("revenue"),1).alias("total_rev"),avg("revenue").alias("avg_rev"))
 )
 
 display(traffic_df)
@@ -84,7 +87,9 @@ print("All test pass")
 # COMMAND ----------
 
 # TODO
-top_traffic_df = (traffic_df.FILL_IN
+top_traffic_df = (traffic_df
+                  .sort(col("total_rev").desc())
+                  .limit(3)
 )
 display(top_traffic_df)
 
@@ -96,8 +101,9 @@ display(top_traffic_df)
 
 expected2 = [(4026578.5, 986.1814), (2322856.0, 1093.1087), (1200591.0, 1067.192)]
 test_df = top_traffic_df.select(round("total_rev", 4).alias("total_rev"), round("avg_rev", 4).alias("avg_rev"))
+display(test_df)
 result2 = [(row.total_rev, row.avg_rev) for row in test_df.collect()]
-
+display(result2)
 assert(expected2 == result2)
 print("All test pass")
 
@@ -111,7 +117,9 @@ print("All test pass")
 # COMMAND ----------
 
 # TODO
-final_df = (top_traffic_df.FILL_IN
+final_df = (top_traffic_df
+            .withColumn("avg_rev",(col("avg_rev") * 100).cast("long") / 100)
+            .withColumn("total_rev",(col("total_rev") * 100).cast("long") / 100)
 )
 
 display(final_df)
@@ -137,7 +145,9 @@ print("All test pass")
 # COMMAND ----------
 
 # TODO
-bonus_df = (top_traffic_df.FILL_IN
+bonus_df = (top_traffic_df
+            .withColumn("avg_rev",round("avg_rev",2))
+            .withColumn("total_rev",round("total_rev",2))
 )
 
 display(bonus_df)
@@ -161,7 +171,16 @@ print("All test pass")
 # COMMAND ----------
 
 # TODO
-chain_df = (df.FILL_IN
+chain_df = (df
+      .withColumn("revenue", col("ecommerce.purchase_revenue_in_usd"))
+      .filter(col("revenue").isNotNull())
+      .drop("event_name")
+      .groupBy("traffic_source")
+      .agg(round(sum("revenue"),1).alias("total_rev"),avg("revenue").alias("avg_rev"))
+      .sort(col("total_rev").desc())
+      .limit(3)
+      .withColumn("avg_rev",round("avg_rev",2))
+      .withColumn("total_rev",round("total_rev",2))
 )
 
 display(chain_df)

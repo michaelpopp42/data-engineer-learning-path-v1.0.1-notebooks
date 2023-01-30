@@ -60,6 +60,11 @@ first_letter_function("annagray@kaufman.com")
 
 # COMMAND ----------
 
+type(first_letter_function)
+first_letter_function("annagray@kaufman.com")
+
+# COMMAND ----------
+
 # MAGIC %md ### Create and apply UDF
 # MAGIC Register the function as a UDF. This serializes the function and sends it to executors to be able to transform DataFrame records.
 
@@ -158,6 +163,10 @@ def vectorized_udf(email: pd.Series) -> pd.Series:
 # def vectorized_udf(email: pd.Series) -> pd.Series:
 #     return email.str[0]
 # vectorized_udf = pandas_udf(vectorized_udf, "string")
+
+# COMMAND ----------
+
+type(vectorized_udf)
 
 # COMMAND ----------
 

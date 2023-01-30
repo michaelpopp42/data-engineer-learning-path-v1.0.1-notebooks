@@ -64,6 +64,17 @@ SELECT * FROM events_strings
 -- MAGIC             col("value").cast("string"))
 -- MAGIC     )
 -- MAGIC display(events_stringsDF)
+-- MAGIC (events_stringsDF.createOrReplaceTempView("events_stringsDFvw"))               
+
+-- COMMAND ----------
+
+SELECT * FROM events_stringsDFvw
+
+-- COMMAND ----------
+
+-- MAGIC %python
+-- MAGIC 
+-- MAGIC display(events_stringsDF)
 
 -- COMMAND ----------
 
@@ -264,6 +275,32 @@ PIVOT (
 -- MAGIC     .sum("item.quantity")
 -- MAGIC )
 -- MAGIC display(transactionsDF)
+
+-- COMMAND ----------
+
+-- MAGIC %python
+-- MAGIC display(transactionsDF.where("order_id = '361278'")) 
+
+-- COMMAND ----------
+
+SELECT *
+FROM item_purchases
+PIVOT (
+  sum(item.quantity) FOR item_id IN (
+    'P_FOAM_K',
+    'M_STAN_Q',
+    'P_FOAM_S',
+    'M_PREM_Q',
+    'M_STAN_F',
+    'M_STAN_T',
+    'M_PREM_K',
+    'M_PREM_F',
+    'M_STAN_K',
+    'M_PREM_T',
+    'P_DOWN_S',
+    'P_DOWN_K')
+)
+where order_id = '361278'
 
 -- COMMAND ----------
 
